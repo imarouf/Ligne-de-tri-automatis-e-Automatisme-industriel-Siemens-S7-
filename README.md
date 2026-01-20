@@ -1,124 +1,201 @@
-# Ligne de tri automatisée – Automatisme industriel (Siemens S7)
+# ⏱️ Temps nécessaire pour le projet – Ligne de tri automatisée
 
-On s’intéresse à développer un système de ligne de tri automatisée qui va : 
-détecter des pièces
-les classer selon un critère
-les oriente vers différentes sorties
+👉 **Réponse courte**  
+➡️ Entre **20 et 40 heures**, selon le niveau de finition souhaité.
 
-## Présentation du projet
-Ce projet consiste à concevoir et simuler une **ligne de tri automatisée** pilotée par un **automate Siemens S7**, avec une **supervision opérateur via WinCC**.  
-L’objectif est de reproduire un cas industriel réaliste mettant en œuvre une logique séquentielle, la gestion de capteurs/actionneurs, des sécurités et des défauts.
-
-Le projet a été réalisé **en autonomie**, avec une approche orientée **automatisme industriel et mise en service**.
+Ce projet a été conçu comme un **projet d’automatisme industriel simple de A à Z**, avec une approche réaliste proche des pratiques en entreprise.
 
 ---
 
-## Objectifs techniques
-- Analyser un besoin fonctionnel industriel
-- Traduire le cahier des charges sous forme de GRAFCET multi-niveaux ( points de vue système, opérative, commande et automate)
-- Concevoir une logique de commande fiable et sécurisée
-- Programmer un automate Siemens sous **TIA Portal**
-- Mettre en place une **supervision opérateur (IHM)**
-- Tester et valider le fonctionnement via simulation
+## 🧩 Découpage réaliste (automaticien junior)
 
 ---
 
-## Description du fonctionnement
-Une pièce est transportée par un convoyeur motorisé.  
-Lorsqu’elle est détectée par un capteur de présence, un critère de tri (simulé) permet de décider si la pièce doit être orientée vers la **sortie A** ou la **sortie B** à l’aide d’un déviateur.
+## 1️⃣ Définition du besoin & architecture  
+⏱️ **2–3 h**
 
-Le système fonctionne selon plusieurs modes :
-- **Arrêt**
-- **Manuel**
-- **Automatique**
-- **Défaut / Arrêt d’urgence**
+### 🎯 Objectif
+Définir clairement le besoin fonctionnel et poser les bases du système avant toute programmation.
 
----
-
-## Architecture du système
-
-### Capteurs (simulés)
-- Capteur de présence pièce
-- Capteur de type pièce (A / B)
-
-### Actionneurs (simulés)
-- Moteur de convoyeur
-- Vérin / déviateur de tri
+Le but est de développer une **ligne de tri automatisée** capable de :
+- détecter des pièces
+- les classer selon un critère défini
+- les orienter vers différentes sorties
 
 ---
 
-## Logique de commande
-La logique de commande est basée sur :
-- Un **cycle séquentiel** (type GRAFCET)
-- Des temporisations et conditions de transition
-- Une gestion des modes de fonctionnement
-- Des sécurités intégrées
+### 🔄 Fonctionnement global
+Le fonctionnement du système est le suivant :
+
+Un convoyeur transporte des pièces →  
+Un capteur détecte la présence d’une pièce →  
+Un critère de tri est analysé →  
+La pièce est dirigée vers la sortie correspondante →  
+Le système revient à l’état initial et attend la pièce suivante  
+
+Ce cycle est répété de manière automatique.
 
 ---
 
-## Sécurités intégrées
-Le projet intègre plusieurs mécanismes de sécurité :
-- **Arrêt d’urgence** prioritaire (arrêt immédiat des actionneurs)
-- **Détection de défaut capteur** (présence active trop longtemps)
-- **Sécurité de séquence** (actions autorisées uniquement dans les états cohérents)
-- **Redémarrage sécurisé** avec acquittement opérateur après défaut
+### 📥 Liste des entrées / capteurs (simulés)
+
+| Référence | Désignation | Rôle |
+|---------|------------|------|
+| S1 | Capteur de présence (type infrarouge) | Détecter l’arrivée d’une pièce sur le convoyeur |
+| S2 | Capteur de type | Déterminer la catégorie de la pièce (A ou B) |
 
 ---
 
-## Supervision (WinCC)
-L’IHM permet à l’opérateur de :
-- Commander la machine (Marche / Arrêt / Auto / Manuel)
-- Visualiser l’état du système
-- Consulter les défauts et alarmes
-- Suivre les compteurs de pièces triées (A / B)
-- Acquitter les défauts
+### 📤 Liste des sorties / actionneurs (simulés)
+
+| Référence | Désignation | Rôle |
+|---------|------------|------|
+| M1 | Moteur de convoyeur | Assurer le déplacement des pièces |
+| Y1 | Vérin de déviation | Orienter la pièce vers la sortie appropriée |
 
 ---
 
-## Tests & validation
-Le système a été validé par simulation à l’aide de **PLCSim** :
+### ⚙️ Modes de fonctionnement
+
+- **Arrêt**  
+  Permet l’arrêt complet et immédiat du système.
+
+- **Automatique**  
+  Le système exécute le cycle de tri de manière autonome.
+
+- **Mode défaut / alarme**  
+  Déclenché en cas de comportement anormal (capteur bloqué, incohérence de séquence, arrêt d’urgence).
+
+> Le mode manuel n’est pas implémenté dans cette version afin de conserver un projet simple et ciblé automatisme.
+
+---
+
+## 2️⃣ Logique de commande & GRAFCET  
+⏱️ **4–6 h**
+
+### 🎯 Objectif
+Définir une logique séquentielle claire, robuste et compréhensible, typique d’un système automatisé industriel.
+
+---
+
+### 🔁 Description du cycle automatique
+
+Le cycle automatique se déroule selon les étapes suivantes :
+
+1. Le système attend l’arrivée d’une pièce
+2. Le convoyeur est mis en marche
+3. La pièce est détectée par le capteur de présence
+4. Le type de la pièce est analysé
+5. La décision de tri est prise
+6. Le vérin dévie la pièce vers la sortie correspondante
+7. Le système revient à l’état initial
+
+---
+
+### 🧠 Principe de la logique de commande
+La logique repose sur :
+- une **séquence d’états bien définie**
+- des **conditions de transition claires**
+- des **temporisations** pour éviter les comportements incohérents
+- une gestion des défauts intégrée
+
+---
+
+### 📊 GRAFCET
+Un GRAFCET a été défini afin de représenter le cycle automatique :
+
+- Étape d’attente
+- Étape convoyeur en marche
+- Étape analyse du type de pièce
+- Étape déviation
+- Étape retour à l’état initial
+
+Des transitions prioritaires permettent :
+- le passage en **arrêt sécurisé**
+- la détection et la gestion des défauts
+
+Le GRAFCET constitue la base de la programmation PLC.
+
+---
+
+## 3️⃣ Programmation PLC (TIA Portal)  
+⏱️ **8–12 h**
+
+- Organisation claire du programme
+- Utilisation des blocs **OB / FC / FB**
+- Gestion des entrées / sorties
+- Temporisations et compteurs
+- Tests unitaires du programme
+
+👉 **Partie centrale du projet.**
+
+---
+
+## 4️⃣ Supervision WinCC  
+⏱️ **4–6 h**
+
+- Écrans principaux de commande
+- Boutons de contrôle et voyants d’état
+- Gestion des alarmes
+- Compteurs de pièces triées
+
+---
+
+## 5️⃣ Simulation & tests (PLCSim)  
+⏱️ **3–5 h**
+
 - Tests en fonctionnement nominal
 - Tests de défauts capteurs
-- Tests d’arrêt d’urgence
-- Tests de redémarrage après défaut
-
-Les résultats des tests confirment un comportement conforme au cahier des charges.
+- Test de l’arrêt d’urgence
+- Test du redémarrage après défaut
 
 ---
 
-## Technologies utilisées
-- Automate : **Siemens S7**
-- Environnement de développement : **TIA Portal**
-- Simulation : **PLCSim**
-- Supervision : **WinCC**
-- Langages : LAD / FBD
+## 6️⃣ Documentation & GitHub  
+⏱️ **3–4 h**
+
+- README clair et structuré
+- Screenshots du projet
+- Explication de l’architecture
+- Description des cas de tests
+
+👉 **Ce point fait la différence sur un CV.**
 
 ---
 
-## Structure du dépôt
+## 📊 Récapitulatif
 
-automated-sorting-line/
-├── README.md
-├── specification.md
-├── plc/
-├── hmi/
-├── screenshots/
-└── tests.md
+| Niveau de projet | Temps estimé | Impact CV |
+|-----------------|------------|-----------|
+| Minimal propre | ~20 h | ✅ Suffisant |
+| Solide industriel | ~30 h | 🔥 Très bon |
+| Très poussé | ~40 h | 🚀 Excellent |
 
-
----
-
-## Ce que ce projet m’a apporté
-- Mise en pratique des bases de l’automatisme industriel
-- Conception d’une logique séquentielle robuste
-- Approche sécurité et gestion des défauts
-- Programmation et structuration d’un projet PLC
-- Importance de la documentation technique
+👉 **30 h est le sweet spot.**
 
 ---
 
-## Auteur
-Projet réalisé par **Ilyes Marouf**  
-Étudiant en dernière année d'école d'ingénieur en informatique industrielle et électronique à l'ISEN Marseille.
-Projet personnel orienté automatisme industriel
+## 🧠 Conseil stratégique
+Mieux vaut :
+- **1 projet bien fini**
 
+plutôt que :
+- **3 projets à moitié faits**
+
+Un recruteur préférera toujours :
+> *« Il a un projet clair, testé et documenté »*
+
+---
+
+## 🗓️ Exemple de planning simple
+
+- **Semaine 1** : logique + PLC  
+- **Semaine 2** : IHM + tests + GitHub  
+
+➡️ Projet faisable en **2 semaines tranquilles**, même avec une alternance.
+
+---
+
+## 👤 Auteur
+Projet personnel réalisé par **Ilyes Marouf**  
+Projet orienté **automatisme industriel – Siemens S7**

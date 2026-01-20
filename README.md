@@ -1,5 +1,10 @@
 # Ligne de tri automatisée – Automatisme industriel (Siemens S7)
 
+On s’intéresse à développer un système de ligne de tri automatisée qui va : 
+détecter des pièces
+les classer selon un critère
+les oriente vers différentes sorties
+
 ## Présentation du projet
 Ce projet consiste à concevoir et simuler une **ligne de tri automatisée** pilotée par un **automate Siemens S7**, avec une **supervision opérateur via WinCC**.  
 L’objectif est de reproduire un cas industriel réaliste mettant en œuvre une logique séquentielle, la gestion de capteurs/actionneurs, des sécurités et des défauts.
@@ -10,6 +15,7 @@ Le projet a été réalisé **en autonomie**, avec une approche orientée **auto
 
 ## Objectifs techniques
 - Analyser un besoin fonctionnel industriel
+- Traduire le cahier des charges sous forme de GRAFCET multi-niveaux ( points de vue système, opérative, commande et automate)
 - Concevoir une logique de commande fiable et sécurisée
 - Programmer un automate Siemens sous **TIA Portal**
 - Mettre en place une **supervision opérateur (IHM)**
@@ -89,4 +95,30 @@ Les résultats des tests confirment un comportement conforme au cahier des charg
 
 ---
 
-## 📁 Structure du dépôt
+## Structure du dépôt
+
+automated-sorting-line/
+├── README.md
+├── specification.md
+├── plc/
+├── hmi/
+├── screenshots/
+└── tests.md
+
+
+---
+
+## Ce que ce projet m’a apporté
+- Mise en pratique des bases de l’automatisme industriel
+- Conception d’une logique séquentielle robuste
+- Approche sécurité et gestion des défauts
+- Programmation et structuration d’un projet PLC
+- Importance de la documentation technique
+
+---
+
+## Auteur
+Projet réalisé par **Ilyes Marouf**  
+Étudiant en dernière année d'école d'ingénieur en informatique industrielle et électronique à l'ISEN Marseille.
+Projet personnel orienté automatisme industriel
+

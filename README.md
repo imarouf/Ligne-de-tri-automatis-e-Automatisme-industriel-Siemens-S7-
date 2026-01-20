@@ -1,201 +1,119 @@
-# ⏱️ Temps nécessaire pour le projet – Ligne de tri automatisée
+# Ligne de tri automatisée – Projet d’automatisme industriel
 
-👉 **Réponse courte**  
-➡️ Entre **20 et 40 heures**, selon le niveau de finition souhaité.
+## Présentation du projet
+Ce projet a pour objectif de concevoir et simuler une **ligne de tri automatisée** pilotée par un **automate Siemens S7**, avec une **supervision via WinCC**.
 
-Ce projet a été conçu comme un **projet d’automatisme industriel simple de A à Z**, avec une approche réaliste proche des pratiques en entreprise.
-
----
-
-## 🧩 Découpage réaliste (automaticien junior)
+Il s’agit d’un projet d’automatisme réalisé de bout en bout, depuis la définition du besoin jusqu’à la simulation et la documentation, dans une approche proche d’un cas industriel réel.
 
 ---
 
-## 1️⃣ Définition du besoin & architecture  
-⏱️ **2–3 h**
-
-### 🎯 Objectif
-Définir clairement le besoin fonctionnel et poser les bases du système avant toute programmation.
-
-Le but est de développer une **ligne de tri automatisée** capable de :
-- détecter des pièces
+## Objectif du système
+Le système doit être capable de :
+- détecter des pièces sur un convoyeur
 - les classer selon un critère défini
 - les orienter vers différentes sorties
+- fonctionner de manière automatique et sécurisée
 
 ---
 
-### 🔄 Fonctionnement global
-Le fonctionnement du système est le suivant :
+## Description du fonctionnement global
+Le fonctionnement général de la ligne de tri est le suivant :
 
-Un convoyeur transporte des pièces →  
-Un capteur détecte la présence d’une pièce →  
-Un critère de tri est analysé →  
-La pièce est dirigée vers la sortie correspondante →  
-Le système revient à l’état initial et attend la pièce suivante  
+Un convoyeur transporte les pièces.  
+Lorsqu’une pièce est détectée par un capteur de présence, le système analyse un critère de tri simulé.  
+En fonction de ce critère, la pièce est orientée vers la sortie correspondante à l’aide d’un vérin de déviation.  
+Une fois la pièce triée, le système revient à l’état initial et attend la pièce suivante.
 
-Ce cycle est répété de manière automatique.
-
----
-
-### 📥 Liste des entrées / capteurs (simulés)
-
-| Référence | Désignation | Rôle |
-|---------|------------|------|
-| S1 | Capteur de présence (type infrarouge) | Détecter l’arrivée d’une pièce sur le convoyeur |
-| S2 | Capteur de type | Déterminer la catégorie de la pièce (A ou B) |
+Le cycle est répété de manière automatique.
 
 ---
 
-### 📤 Liste des sorties / actionneurs (simulés)
+## Définition du besoin et architecture
 
-| Référence | Désignation | Rôle |
-|---------|------------|------|
-| M1 | Moteur de convoyeur | Assurer le déplacement des pièces |
-| Y1 | Vérin de déviation | Orienter la pièce vers la sortie appropriée |
+### Capteurs (simulés)
+- Capteur de présence de type infrarouge, utilisé pour détecter l’arrivée d’une pièce
+- Capteur de type, utilisé pour déterminer la catégorie de la pièce (A ou B)
 
----
-
-### ⚙️ Modes de fonctionnement
-
-- **Arrêt**  
-  Permet l’arrêt complet et immédiat du système.
-
-- **Automatique**  
-  Le système exécute le cycle de tri de manière autonome.
-
-- **Mode défaut / alarme**  
-  Déclenché en cas de comportement anormal (capteur bloqué, incohérence de séquence, arrêt d’urgence).
-
-> Le mode manuel n’est pas implémenté dans cette version afin de conserver un projet simple et ciblé automatisme.
+### Actionneurs (simulés)
+- Moteur de convoyeur assurant le déplacement des pièces
+- Vérin de déviation permettant d’orienter les pièces vers la bonne sortie
 
 ---
 
-## 2️⃣ Logique de commande & GRAFCET  
-⏱️ **4–6 h**
+## Modes de fonctionnement
+Le système intègre les modes suivants :
+- **Arrêt** : arrêt complet du système
+- **Automatique** : exécution autonome du cycle de tri
+- **Défaut / alarme** : mise en sécurité du système en cas de comportement anormal
 
-### 🎯 Objectif
-Définir une logique séquentielle claire, robuste et compréhensible, typique d’un système automatisé industriel.
-
----
-
-### 🔁 Description du cycle automatique
-
-Le cycle automatique se déroule selon les étapes suivantes :
-
-1. Le système attend l’arrivée d’une pièce
-2. Le convoyeur est mis en marche
-3. La pièce est détectée par le capteur de présence
-4. Le type de la pièce est analysé
-5. La décision de tri est prise
-6. Le vérin dévie la pièce vers la sortie correspondante
-7. Le système revient à l’état initial
+Le mode manuel n’est pas implémenté dans cette version afin de conserver un projet simple et ciblé automatisme.
 
 ---
 
-### 🧠 Principe de la logique de commande
-La logique repose sur :
-- une **séquence d’états bien définie**
-- des **conditions de transition claires**
-- des **temporisations** pour éviter les comportements incohérents
-- une gestion des défauts intégrée
+## Logique de commande et séquence automatique
+La logique de commande repose sur une **séquence d’états** décrivant le cycle automatique :
+
+1. Attente de l’arrivée d’une pièce  
+2. Mise en marche du convoyeur  
+3. Détection de la pièce  
+4. Analyse du type de pièce  
+5. Décision de tri  
+6. Déviation de la pièce vers la sortie correspondante  
+7. Retour à l’état initial  
+
+Cette logique est formalisée à l’aide d’un **GRAFCET**, servant de base à la programmation de l’automate.
 
 ---
 
-### 📊 GRAFCET
-Un GRAFCET a été défini afin de représenter le cycle automatique :
+## Sécurités et gestion des défauts
+Le projet intègre plusieurs mécanismes de sécurité :
+- arrêt immédiat du système via un arrêt d’urgence
+- détection de défauts capteurs (capteur actif trop longtemps)
+- cohérence de la séquence de fonctionnement
+- redémarrage contrôlé après acquittement d’un défaut
 
-- Étape d’attente
-- Étape convoyeur en marche
-- Étape analyse du type de pièce
-- Étape déviation
-- Étape retour à l’état initial
-
-Des transitions prioritaires permettent :
-- le passage en **arrêt sécurisé**
-- la détection et la gestion des défauts
-
-Le GRAFCET constitue la base de la programmation PLC.
+Ces sécurités permettent de garantir un comportement fiable et sûr du système.
 
 ---
 
-## 3️⃣ Programmation PLC (TIA Portal)  
-⏱️ **8–12 h**
-
-- Organisation claire du programme
-- Utilisation des blocs **OB / FC / FB**
-- Gestion des entrées / sorties
-- Temporisations et compteurs
-- Tests unitaires du programme
-
-👉 **Partie centrale du projet.**
+## Programmation automate
+La programmation est réalisée sous **TIA Portal** pour automate **Siemens S7**.  
+Le programme est structuré de manière claire, avec :
+- une séparation des fonctions
+- une gestion explicite des entrées et sorties
+- l’utilisation de temporisations et de compteurs
+- des tests unitaires du comportement du programme
 
 ---
 
-## 4️⃣ Supervision WinCC  
-⏱️ **4–6 h**
-
-- Écrans principaux de commande
-- Boutons de contrôle et voyants d’état
-- Gestion des alarmes
-- Compteurs de pièces triées
-
----
-
-## 5️⃣ Simulation & tests (PLCSim)  
-⏱️ **3–5 h**
-
-- Tests en fonctionnement nominal
-- Tests de défauts capteurs
-- Test de l’arrêt d’urgence
-- Test du redémarrage après défaut
+## Supervision opérateur
+Une interface de supervision a été développée sous **WinCC** afin de permettre :
+- le pilotage du système
+- la visualisation de l’état de la machine
+- l’affichage des défauts et alarmes
+- le suivi des pièces triées
 
 ---
 
-## 6️⃣ Documentation & GitHub  
-⏱️ **3–4 h**
-
-- README clair et structuré
-- Screenshots du projet
-- Explication de l’architecture
-- Description des cas de tests
-
-👉 **Ce point fait la différence sur un CV.**
+## Simulation et validation
+Le fonctionnement du système a été validé par simulation à l’aide de **PLCSim**.  
+Différents scénarios ont été testés :
+- fonctionnement nominal
+- défauts capteurs
+- arrêt d’urgence
+- redémarrage après défaut
 
 ---
 
-## 📊 Récapitulatif
-
-| Niveau de projet | Temps estimé | Impact CV |
-|-----------------|------------|-----------|
-| Minimal propre | ~20 h | ✅ Suffisant |
-| Solide industriel | ~30 h | 🔥 Très bon |
-| Très poussé | ~40 h | 🚀 Excellent |
-
-👉 **30 h est le sweet spot.**
+## Documentation et dépôt GitHub
+Le projet est documenté et structuré dans ce dépôt GitHub, incluant :
+- la description du fonctionnement
+- les fichiers de programmation
+- des captures d’écran du projet
+- la description des tests réalisés
 
 ---
 
-## 🧠 Conseil stratégique
-Mieux vaut :
-- **1 projet bien fini**
-
-plutôt que :
-- **3 projets à moitié faits**
-
-Un recruteur préférera toujours :
-> *« Il a un projet clair, testé et documenté »*
-
----
-
-## 🗓️ Exemple de planning simple
-
-- **Semaine 1** : logique + PLC  
-- **Semaine 2** : IHM + tests + GitHub  
-
-➡️ Projet faisable en **2 semaines tranquilles**, même avec une alternance.
-
----
-
-## 👤 Auteur
-Projet personnel réalisé par **Ilyes Marouf**  
-Projet orienté **automatisme industriel – Siemens S7**
+## Auteur
+Projet personnel réalisé par **Ilyes Marouf**,  
+dans le cadre d’un approfondissement en **automatisme industriel**.
